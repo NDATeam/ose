@@ -1,0 +1,90 @@
+@import 'base.css';
+
+.bg-intro {
+    background: var(--bg-intro);
+    width: 100%;
+    height: 100vh;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.intro-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    height: 100%;
+}
+
+.intro__title {
+    position: relative;
+    font-size: 8.5rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5rem;
+    padding: 100px 0;
+}
+
+.intro__title::after {
+    content: '';
+    position: absolute;
+    height: 5px;
+    width: 25%;
+    background-color: yellow;
+    bottom: 0;
+    left: 36%;
+}
+
+.intro-group {
+    margin-top: 60px;
+}
+
+.intro__signIn,
+.intro__signUp {
+    position: relative;
+    background-color: transparent;
+    border: 1px solid #fff;
+    height: 50px;
+    width: auto;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    margin: 0 12px;
+    padding: 0 12px;
+    -webkit-transition: all 0.6s;
+    -moz-transition: all 0.6s;
+    -o-transition: all 0.6s;
+    transition: all 0.6s;
+}
+
+.intro__signIn:hover,
+.intro__signUp:hover {
+    color: #000;
+    border-color: #fff;
+    background-color: snow;
+}
+
+.intro__signIn.spinning,
+.intro__signUp.spinning {
+    padding-right: 40px;
+}
+
+.intro__signIn.spinning::before,
+.intro__signUp.spinning::before {
+    position: absolute;
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-radius: 50%;
+    right: 6px;
+    top: 45%;
+    border: 3px solid #000000;
+    border-right: 3px solid #27ae60;
+    -webkit-animation: rotate360 0.5s infinite linear, exist 0.1s forwards ease;
+    animation: rotate360 0.5s infinite linear, exist 0.1s forwards ease;
+}
