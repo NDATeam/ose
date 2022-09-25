@@ -1,18 +1,44 @@
+<?php 
+    include_once './config/Database.php';
+    include_once './class/User.php';
+
+    $database = new Database();
+    $db = $database->getConnection();
+
+    $user = new User($db);
+
+    if($user->loggedIn()) {	
+        if($_SESSION["role"] == 'admin') {
+            $url = 'http://localhost/ose/admin/';
+            header("Location: " . $url);
+        } 
+        else if ($_SESSION["role"] == 'user'){
+            $url = 'http://localhost/ose/';
+            header('Location' . $url);
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="./assets/images/favicon/quiz-icon.png"> 
     <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Online exam system | Sign Up Page</title>
 </head>
 
 <body>
     <div id="wrapper">
         <div class="bg-login">
-            <form action="" method="POST" class="form-login" id="form-1">
+            <form action="" method="POST" class="form-login" id="form-1" enctype="multipart/form-data">
                 <h3 class="heading">Đăng ký</h3>
 
                 <div class="spacer"></div>
@@ -92,7 +118,7 @@
                             <input
                                 name="gender"
                                 type="radio"
-                                value="orthor"
+                                value="other"
                                 class="form-control"
                             />
                             <span>Khác</span>
@@ -133,7 +159,6 @@
                         <i class="fas fa-key"></i>
                         <input
                             id="password_confirmation"
-                            name="password_confirmation"
                             placeholder="NL.M.Khẩu"
                             type="password"
                             class="form-control"
@@ -145,7 +170,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <i class="fas fa-upload"></i>
                     <input
                         id="avatar"
@@ -154,7 +179,7 @@
                         class="form-control"
                     />
                     <span class="form-message"></span>
-                </div>
+                </div> -->
 
                 <button class="form-submit">Đăng ký</button>
             </form>
@@ -194,9 +219,33 @@
                     "Mật khẩu nhập lại không chính xác"
                 ),
             ],
-            onsubmit: function (value) {
-                // CALL API
+            onsubmit: function (value, formElement) {
                 console.log(value);
+                const btnSubmit = formElement.querySelector(".form-submit");
+                
+                btnSubmit.innerHTML = 'Đang đăng ký';
+                btnSubmit.classList.add('spinning');
+
+                setTimeout(function () {
+                    btnSubmit.classList.remove('spinning');
+                    btnSubmit.innerHTML = 'Đăng ký';
+
+                    $.post('process-sign-up.php', value, function (res) { 
+                        if (res === 'http://localhost/ose/sign-in') {
+                            toastr.success('Success', 'Đăng ký thành công');
+
+                            setTimeout(function() {
+                                window.location.href = res;
+                            }, 1500)
+                        } else {
+                            toastr.error('Error', 'Đăng ký thất bại');
+
+                            setTimeout(function() {
+                                window.location.href = res;
+                            }, 1500) 
+                        }
+                    });
+                }, 2000);
             },
         });
     </script>
